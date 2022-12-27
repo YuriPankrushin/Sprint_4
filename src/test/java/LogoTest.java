@@ -33,7 +33,7 @@ public class LogoTest {
         mainPage.clickTopOrderButton();
         CustomerPage customerPage = new CustomerPage(driver);
 
-        assertTrue("Страница 'Для кого самокат' должна была открыться", customerPage.observeHeader());
+        assertTrue("Страница 'Для кого самокат' должна была открыться", customerPage.returnHeader().size() != 0);
 
         //Нажимаем на локо Самокат
         mainPage.pressSamokatLogo();

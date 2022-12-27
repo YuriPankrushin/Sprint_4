@@ -2,6 +2,9 @@ package sprint4;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
+import java.util.List;
 
 public class CustomerPage extends AbstractPage{
     private WebDriver driver;
@@ -16,8 +19,8 @@ public class CustomerPage extends AbstractPage{
 
     private By buttonNext = By.xpath(".//button[text()='Далее']");
 
-    public boolean observeHeader() {
-        return driver.findElement(pageHeader).isDisplayed();
+    public List<WebElement> returnHeader() {
+        return driver.findElements(pageHeader);
     }
 
     public By getInputFieldByParam(String param) {

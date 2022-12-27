@@ -13,7 +13,8 @@ import sprint4.RentInfoPage;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(Parameterized.class)
-public class CreateOrderTest {
+public class CreateOrderWrongRentInfoNegativeTest {
+
     private final String customerName;
     private final String customerLastName;
     private final String customerAddress;
@@ -28,10 +29,10 @@ public class CreateOrderTest {
     private final boolean orderConfirmed;
     private WebDriver driver;
 
-    public CreateOrderTest(String customerName, String customerLastName, String customerAddress, String customerPhone,
-                           String dateOfDelivery, String rentTime, String scooterColor, String commentForCourier,
-                           boolean customerInfoPageWasOpened, boolean rentInfoPageWasOpened,
-                           boolean confirmModalAppeared, boolean orderConfirmed) {
+    public CreateOrderWrongRentInfoNegativeTest(String customerName, String customerLastName, String customerAddress, String customerPhone,
+                                                    String dateOfDelivery, String rentTime, String scooterColor, String commentForCourier,
+                                                    boolean customerInfoPageWasOpened, boolean rentInfoPageWasOpened,
+                                                    boolean confirmModalAppeared, boolean orderConfirmed) {
         this.customerName = customerName;
         this.customerLastName = customerLastName;
         this.customerAddress = customerAddress;
@@ -49,11 +50,8 @@ public class CreateOrderTest {
     @Parameterized.Parameters
     public static Object[][] getTestData() {
         return new Object[][] {
-                {"Юрий", "Панкрушин", "Москва", "89267596044", "31-е декабря", "двое суток", "чёрный жемчуг", "Комментарий для курьера", true, true, true, true},
-                {"Юрий", "Панкрушин", "Москва, ул Шарикоподшипниковая улица, 1", "89267596044", "1-е января", "семеро суток", "серая безысходность", "Комментарий для курьера", true, true, true, true},
-                {"Ю", "П", "М", "8926", "31-е декабря", "двое суток", "чёрный жемчуг", "Комментарий для курьера", true, false, false, false},
-                {"Юрий", "Панкрушин", "Москва", "89267596044", "31-е декабря", "2 суток", "серая безысходность", "Комментарий для курьера", true, true, false, false},
-                {"ЮрийЮрийЮрийЮрийЮрийЮрийЮрийЮрийЮрий", "ПанкрушинПанкрушинПанкрушинПанкрушинПанкрушинПанкрушинПанкрушинПанкрушинПанкрушин", "МоскваМоскваМоскваМоскваМоскваМоскваМосква", "8926759604489267596044892675960448926759604489267596044", "31-е декабря", "двое суток", "чёрный жемчуг", "Не звонить в дверь!Не звонить в дверь!Не звонить в дверь!Не звонить в дверь!Не звонить в дверь!Не звонить в дверь!Не звонить в дверь!Не звонить в дверь!Не звонить в дверь!Не звонить в дверь!", true, false, false, false},
+                {"Юрий", "Панкрушин", "Москва", "89267596044", "2021", "трое суток", "серая безысходность", "Комментарий для курьера", true, true, false, false},
+                {"Юрий", "Панкрушин", "Москва", "89267596044", "3021", "трое суток", "серая безысходность", "Комментарий для курьера", true, true, false, false},
         };
     }
 
@@ -74,8 +72,7 @@ public class CreateOrderTest {
         CustomerPage customerPage = new CustomerPage(driver);
 
         //Проверяем, что открылась форма "Для кого самокат"
-        assertEquals("Страница 'Для кого самокат' должна была открыться", customerInfoPageWasOpened, customerPage.observeHeader());
-
+        assertEquals("Страница 'Для кого самокат' должна была открыться", customerInfoPageWasOpened, customerPage.returnHeader().size() != 0);
         //Заполняем данные из параметров
         customerPage.sendDataToField("Имя", customerName);
         customerPage.sendDataToField("Фамилия", customerLastName);
@@ -88,7 +85,8 @@ public class CreateOrderTest {
 
         //Проверяем, что открылась форма "Про аренду"
         RentInfoPage rentInfoPage = new RentInfoPage(driver);
-        assertEquals("Страница 'Про аренду' должна была открыться",rentInfoPageWasOpened, rentInfoPage.observeHeader());
+        assertEquals("Страница 'Про аренду' должна была открыться", rentInfoPageWasOpened, rentInfoPage.returnHeader().size() != 0);
+        //assertTrue("Страница 'Про аренду' должна была открыться", rentInfoPage.returnHeader().size() != 0);
 
         //Заполняем данные из параметров
         rentInfoPage.chooseDateOfDelivery(dateOfDelivery);
@@ -100,12 +98,12 @@ public class CreateOrderTest {
         rentInfoPage.pressOrderButton();
 
         //Проверяем, что открылось окно с просьбой подтвердить заказ
-        assertEquals("Отображается модальное окно подтверждения заказа", confirmModalAppeared, rentInfoPage.checkModalAppeared());
+        assertEquals("Отображается модальное окно подтверждения заказа", confirmModalAppeared, rentInfoPage.returnModalAppeared().size() != 0);
         rentInfoPage.checkModalHeaderIsCorrect();
 
         //Нажимаем кнопку Да и проверяем, что отобразилось окно с подтверждением заказа
         rentInfoPage.pressYesButton();
-        assertEquals("Отображается подтверждение заказа", orderConfirmed, rentInfoPage.checkThatOrderConfirmed());
+        assertEquals("Отображается подтверждение заказа", orderConfirmed, rentInfoPage.returnOrderConfirmationText().size() != 0);
     }
 
 
@@ -119,13 +117,13 @@ public class CreateOrderTest {
         //Нажимаем на кнопку согласия с куки
         mainPage.closeCookieWarning();
 
+        //Нажимаем верхнюю кнопку Заказать
         mainPage.clickTopOrderButton();
 
         CustomerPage customerPage = new CustomerPage(driver);
 
         //Проверяем, что открылась форма "Для кого самокат"
-        assertEquals("Страница 'Для кого самокат' должна была открыться", customerInfoPageWasOpened, customerPage.observeHeader());
-
+        assertEquals("Страница 'Для кого самокат' должна была открыться", customerInfoPageWasOpened, customerPage.returnHeader().size() != 0);
         //Заполняем данные из параметров
         customerPage.sendDataToField("Имя", customerName);
         customerPage.sendDataToField("Фамилия", customerLastName);
@@ -138,7 +136,8 @@ public class CreateOrderTest {
 
         //Проверяем, что открылась форма "Про аренду"
         RentInfoPage rentInfoPage = new RentInfoPage(driver);
-        assertEquals("Страница 'Про аренду' должна была открыться",rentInfoPageWasOpened, rentInfoPage.observeHeader());
+        assertEquals("Страница 'Про аренду' должна была открыться", rentInfoPageWasOpened, rentInfoPage.returnHeader().size() != 0);
+        //assertTrue("Страница 'Про аренду' должна была открыться", rentInfoPage.returnHeader().size() != 0);
 
         //Заполняем данные из параметров
         rentInfoPage.chooseDateOfDelivery(dateOfDelivery);
@@ -150,12 +149,12 @@ public class CreateOrderTest {
         rentInfoPage.pressOrderButton();
 
         //Проверяем, что открылось окно с просьбой подтвердить заказ
-        assertEquals("Отображается модальное окно подтверждения заказа", confirmModalAppeared, rentInfoPage.checkModalAppeared());
+        assertEquals("Отображается модальное окно подтверждения заказа", confirmModalAppeared, rentInfoPage.returnModalAppeared().size() != 0);
         rentInfoPage.checkModalHeaderIsCorrect();
 
         //Нажимаем кнопку Да и проверяем, что отобразилось окно с подтверждением заказа
         rentInfoPage.pressYesButton();
-        assertEquals("Отображается подтверждение заказа", orderConfirmed, rentInfoPage.checkThatOrderConfirmed());
+        assertEquals("Отображается подтверждение заказа", orderConfirmed, rentInfoPage.returnOrderConfirmationText().size() != 0);
     }
 
     @After

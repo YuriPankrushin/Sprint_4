@@ -2,38 +2,44 @@ package sprint4;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.util.List;
 
 public class RentInfoPage extends AbstractPage {
 
-    private WebDriver driver;
+    private final WebDriver driver;
 
     public RentInfoPage(WebDriver driver){
         super(driver);
         this.driver = driver;
     }
 
-    private By pageHeader = By.xpath(".//div[text()='Про аренду']");
-    private By rentTimeField = By.xpath(".//div[contains(text(), 'Срок аренды')]");
+    private final By pageHeader = By.xpath(".//div[text()='Про аренду']");
+    private final By rentTimeField = By.xpath(".//span[@class='Dropdown-arrow']");
 
-    private By orderConfirmModal = By.xpath(".//div[contains(@class, 'ModalHeader')]/parent::div");
-    private By orderConfirmModalHeader = By.xpath(".//div[text()='Хотите оформить заказ?']");
+    private final By orderConfirmModalHeader = By.xpath(".//div[text()='Хотите оформить заказ?']");
 
-    private By orderButton = By.xpath(".//div[contains(@class, 'Order')]/button[text()='Заказать']");
-    private By yesButton = By.xpath(".//button[text()='Да']");
+    private final By orderButton = By.xpath(".//div[contains(@class, 'Order')]/button[text()='Заказать']");
+    private final By yesButton = By.xpath(".//button[text()='Да']");
 
-    private By orderConfirmed = By.xpath(".//div[text()='Заказ оформлен']");
+    private final By orderConfirmed = By.xpath(".//div[text()='Заказ оформлен']");
 
     public By getInputFieldByParam(String param) {
         return By.xpath(String.format(".//input[contains(@placeholder, '%s')]", param));
     }
 
-    public boolean observeHeader() {
-        return driver.findElement(pageHeader).isDisplayed();
+    public List<WebElement> returnHeader() {
+        return driver.findElements(pageHeader);
     }
 
-    public void chooseDateOfDelivery(String dayMonth) {
+    public void chooseDateOfDelivery(String year) {
+        new WebDriverWait(driver, 3)
+                .until(ExpectedConditions.elementToBeClickable(getInputFieldByParam("Когда привезти самокат")));
         driver.findElement(getInputFieldByParam("Когда привезти самокат")).click();
-        driver.findElement(By.xpath(String.format(".//div[contains(@aria-label, '%s')]", dayMonth))).click();
+        driver.findElement(getInputFieldByParam("Когда привезти самокат")).sendKeys(year);
     }
 
     public void chooseRentTime(String rentTime) {
@@ -49,8 +55,8 @@ public class RentInfoPage extends AbstractPage {
         driver.findElement(getInputFieldByParam("Комментарий")).sendKeys(comment);
     }
 
-    public boolean checkModalAppeared() {
-        return driver.findElement(orderConfirmModalHeader).isDisplayed();
+    public List<WebElement> returnModalAppeared() {
+        return driver.findElements(orderConfirmModalHeader);
     }
 
     public void checkModalHeaderIsCorrect() {
@@ -65,7 +71,7 @@ public class RentInfoPage extends AbstractPage {
         driver.findElement(yesButton).click();
     }
 
-    public boolean checkThatOrderConfirmed() {
-        return driver.findElement(orderConfirmed).isDisplayed();
+    public List<WebElement> returnOrderConfirmationText() {
+        return driver.findElements(orderConfirmed);
     }
 }
