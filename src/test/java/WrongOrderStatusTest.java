@@ -13,14 +13,14 @@ import static org.junit.Assert.assertEquals;
 
 
 @RunWith(Parameterized.class)
-public class WrongOrderTest {
+public class WrongOrderStatusTest {
 
     private WebDriver driver;
     private final String orderNumber;
     private final boolean notFoundPageDisplayed;
 
 
-    public WrongOrderTest(String orderNumber, boolean notFoundPageDisplayed) {
+    public WrongOrderStatusTest(String orderNumber, boolean notFoundPageDisplayed) {
         this.orderNumber = orderNumber;
         this.notFoundPageDisplayed = notFoundPageDisplayed;
 
@@ -59,7 +59,7 @@ public class WrongOrderTest {
 
         //Проверяем, что на странице отобразилась картинка с надрисью "Такого заказа нет"
         OrderStatusPage orderStatusPage = new OrderStatusPage(driver);
-        assertEquals("Заказ должен отсутствовать", notFoundPageDisplayed, orderStatusPage.checkThatOrderNotFoundPageDisplayed());
+        assertEquals("Заказ должен отсутствовать", notFoundPageDisplayed, orderStatusPage.returnOrderNotFoundPic().size() != 0);
     }
 
     @After
