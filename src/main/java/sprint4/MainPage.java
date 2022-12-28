@@ -84,23 +84,16 @@ public class MainPage extends AbstractPage {
     /** Локаторы для создания заказа */
 
     //Кнопка Заказать в заголовке страницы
-    private final By orderButtonTop = By.xpath(".//div[contains(@class, 'Header')]/button[text()='Заказать']");
+    public static By orderButtonTop = By.xpath(".//div[contains(@class, 'Header')]/button[text()='Заказать']");
 
     //Кнопка Заказать внизу страницы
-    private final By orderButtonBottom = By.xpath(".//div[contains(@class, 'Finish')]/button[text()='Заказать']");
+    public static By orderButtonBottom = By.xpath(".//div[contains(@class, 'Finish')]/button[text()='Заказать']");
 
-    public void clickTopOrderButton() {
-        ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView();",driver.findElement(orderButtonTop));
+    public void clickOrderButton(By orderButton) {
+        ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView();",driver.findElement(orderButton));
         new WebDriverWait(driver, 3)
-                .until(ExpectedConditions.elementToBeClickable(orderButtonTop));
-        driver.findElement(orderButtonTop).click();
-    }
-
-    public void clickBottomOrderButton() {
-        ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView();",driver.findElement(orderButtonBottom));
-        new WebDriverWait(driver, 3)
-                .until(ExpectedConditions.elementToBeClickable(orderButtonBottom));
-        driver.findElement(orderButtonBottom).click();
+                .until(ExpectedConditions.elementToBeClickable(orderButton));
+        driver.findElement(orderButton).click();
     }
 
     /** Локаторы и методы для доп заданий */
@@ -108,7 +101,6 @@ public class MainPage extends AbstractPage {
     //Поле номера заказа
     private final By orderStatusButton = By.xpath(".//button[text()='Статус заказа']");
     private final By orderNumberField = By.xpath(".//input[@placeholder='Введите номер заказа']");
-
     private final By goButton = By.xpath(".//button[text()='Go!']");
 
     public void pressOrderStatusButton() {

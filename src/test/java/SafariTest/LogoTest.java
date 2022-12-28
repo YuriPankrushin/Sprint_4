@@ -1,13 +1,15 @@
-import io.github.bonigarcia.wdm.WebDriverManager;
+package SafariTest;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.safari.SafariDriver;
 import sprint4.CustomerPage;
 import sprint4.MainPage;
 
 import static org.junit.Assert.assertTrue;
+import static sprint4.MainPage.orderButtonTop;
 
 public class LogoTest {
 
@@ -15,22 +17,19 @@ public class LogoTest {
 
     @Before
     public void startUp() {
-        WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
+        driver = new SafariDriver();
+        //Открываем страницу
+        driver.get("https://qa-scooter.praktikum-services.ru/");
     }
 
     @Test
-    public void checkSamokatLogoFuction(){
-        MainPage mainPage = new MainPage(driver);
-
-        //Открываем страницу
-        driver.get("https://qa-scooter.praktikum-services.ru/");
-
+    public void checkSamokatLogoFunction(){
         //Нажимаем на кнопку согласия с куки
+        MainPage mainPage = new MainPage(driver);
         mainPage.closeCookieWarning();
 
         //Нажимаем на кнопку заказа, чтобы перейти на страницу заказа
-        mainPage.clickTopOrderButton();
+        mainPage.clickOrderButton(orderButtonTop);
         CustomerPage customerPage = new CustomerPage(driver);
 
         assertTrue("Страница 'Для кого самокат' должна была открыться", customerPage.returnHeader().size() != 0);
@@ -44,13 +43,9 @@ public class LogoTest {
 
 
     @Test
-    public void checkYandexLogoFuction(){
-        MainPage mainPage = new MainPage(driver);
-
-        //Открываем страницу
-        driver.get("https://qa-scooter.praktikum-services.ru/");
-
+    public void checkYandexLogoFunction(){
         //Нажимаем на кнопку согласия с куки
+        MainPage mainPage = new MainPage(driver);
         mainPage.closeCookieWarning();
 
         //Нажимаем на кнопку заказа, чтобы перейти на страницу заказа

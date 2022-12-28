@@ -15,7 +15,7 @@ public class CustomerPage extends AbstractPage{
     }
 
     private By pageHeader = By.xpath(".//div[text()='Для кого самокат']");
-    private By metroStation = By.xpath(".//button[@value='1']");
+    private By metroStation = By.xpath(".//button[@value='2']");
 
     private By buttonNext = By.xpath(".//button[text()='Далее']");
 

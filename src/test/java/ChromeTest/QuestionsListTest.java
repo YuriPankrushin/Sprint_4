@@ -1,3 +1,5 @@
+package ChromeTest;
+
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.After;
 import org.junit.Before;
@@ -15,16 +17,14 @@ public class QuestionsListTest {
     public void startUp() {
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
+        //Открываем страницу
+        driver.get("https://qa-scooter.praktikum-services.ru/");
     }
 
     @Test
     public void checkTextInQuestionsList() {
-        MainPage mainPage = new MainPage(driver);
-
-        //Открываем страницу
-        driver.get("https://qa-scooter.praktikum-services.ru/");
-
         //Нажимаем на кнопку согласия с куки
+        MainPage mainPage = new MainPage(driver);
         mainPage.closeCookieWarning();
 
         //Проматываем страницу до списка вопросов
